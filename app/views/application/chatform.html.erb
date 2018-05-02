@@ -1,0 +1,31 @@
+<% content_for(:title) do %>
+  Send Chat
+<% end %>
+
+<%= form_for @chat, html: {class: "form-horizontal center"} do |f| %>
+  <% if @chat.errors.full_messages.any? %>
+    <% @chat.errors.full_messages.each do |error_message| %>
+      <%= error_message %>
+    <% end %>
+  <% end %>
+
+  <div class="form-group">
+    <%= f.label :receiver_id, "Receiver:", class: "col-md-4 control-label" %>
+    <div class="col-md-8">
+      <%= f.select(:receiver_id, options_for_select(@users.map{|u| [u.name, u.id]}, f.object.receiver_id), {include_blank: true}, {class: "form-control"}) %>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :chat, "Message:", class: "col-md-4 control-label" %>
+    <div class="col-md-8">
+      <%= f.text_field :chat, class: "form-control" %>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-offset-4 col-md-8">
+      <%= f.submit "Submit", class: "btn btn-default btn-primary" %>
+    </div>
+  </div>
+<% end %>

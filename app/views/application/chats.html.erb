@@ -1,0 +1,28 @@
+<% content_for(:title) do %>
+  Chats
+<% end %>
+<div class="container-fluid">
+  <% if @chats.length === 0 %>
+    <div class="alert alert-danger">Nothing to show...</div>
+  <% end %>
+
+  <% unless current_user.admin? %>
+    <% @chats.each do |chat| %>
+      <% if chat.sender_id === current_user.id %>
+        <div class="alert alert-success">To: <%= chat.receiver.name %> - <%= chat.chat %> (<%= distance_of_time_in_words_to_now(chat.created_at) %> ago)</div>
+      <% else %>
+        <div class="alert alert-warning text-right">From: <%= chat.sender.name %> - <%= chat.chat %> (<%= distance_of_time_in_words_to_now(chat.created_at) %> ago)</div>
+      <% end %>
+    <% end %>
+  <% else %>
+    <% @chats.each do |chat| %>
+      <div class="alert alert-success">From: <%= chat.sender.name %>, To: <%= chat.receiver.name %> - <%= chat.chat %> (<%= distance_of_time_in_words_to_now(chat.created_at) %> ago)
+
+        <div class="actions">
+          <%= link_to "Edit".html_safe, chat_path(id: chat.id) %>
+          <%= link_to "Delete".html_safe, delete_chat_path(id: chat.id), data: {method: 'DELETE'} %>
+        </div>
+      </div>
+    <% end %>
+  <% end %>
+</div>
